@@ -1,19 +1,61 @@
-const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+const apiKey = '';
+let cities = [];
 
 function fetchWeather() {
     const city = document.getElementById('city').value;
     if (!city) return alert('Please enter a city name.');
 
+    cities.push(city);
+    updateCitySelector();
+
     // Current Weather API Call
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
         .then(response => response.json())
-        .then(data => displayCurrentWeather(data))
+        .then(data => {
+            displayCurrentWeather(data);
+            setWeatherBackground(data.weather[0].main);
+        })
         .catch(error => console.error('Error fetching weather:', error));
+}
 
-    // 5-day Forecast API Call
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
+function updateCitySelector() {
+    const selector = document.getElementById('city-selector');
+    selector.innerHTML = `<option value="">Previous Cities</option>` +
+                         cities.map(city => `<option value="${city}">${city}</option>`).join('');
+}
+
+function switchCity() {
+    const selectedCity = document.getElementById('city-selector').value;
+    if (selectedCity) {
+        document.getElementById('city').value = selectedCity;
+        fetchWeather();
+    }
+}
+
+function setWeatherBackground(weatherType) {
+    const weatherApp = document.getElementById('weatherApp');
+    weatherApp.className = "weather-app"; // Reset class
+    if (weatherType.toLowerCase().includes("cloud")) {
+        weatherApp.classList.add("cloudy");
+    } else if (weatherType.toLowerCase().includes("rain")) {
+        weatherApp.classList.add("rainy");
+    } else if (weatherType.toLowerCase().includes("snow")) {
+        weatherApp.classList.add("snowy");
+    } else {
+        weatherApp.classList.add("sunny");
+    }
+}
+
+function fetchForecast(days) {
+    const city = document.getElementById('city').value;
+    if (!city) return alert('Please enter a city name.');
+
+    // Adjust forecast API for different day ranges
+    const forecastAPI = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+    
+    fetch(forecastAPI)
         .then(response => response.json())
-        .then(data => displayForecast(data))
+        .then(data => displayForecast(data, days))
         .catch(error => console.error('Error fetching forecast:', error));
 }
 
@@ -29,17 +71,16 @@ function displayCurrentWeather(data) {
     `;
 }
 
-function displayForecast(data) {
+function displayForecast(data, days) {
     const forecastDisplay = document.getElementById('forecast-display');
-    forecastDisplay.innerHTML = data.list
-        .filter((_, index) => index % 8 === 0) // 8 data points per day
-        .map(day => `
-            <div class="forecast-card">
-                <p>${new Date(day.dt_txt).toLocaleDateString()}</p>
-                <p>${day.main.temp}°C</p>
-                <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}.png" alt="weather icon">
-                <p>${day.weather[0].description}</p>
-            </div>
-        `)
-        .join('');
+    const filteredData = data.list.filter((_, index) => index % 8 === 0); // Roughly once per day
+
+    forecastDisplay.innerHTML = filteredData.slice(0, days).map(day => `
+        <div class="forecast-card">
+            <p>${new Date(day.dt_txt).toLocaleDateString()}</p>
+            <p>${day.main.temp}°C</p>
+            <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}.png" alt="weather icon">
+            <p>${day.weather[0].description}</p>
+        </div>
+    `).join('');
 }
