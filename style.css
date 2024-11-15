@@ -1,3 +1,4 @@
+/* Default styles */
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -5,14 +6,74 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    transition: background 0.5s;
+    overflow: hidden;
 }
 
 .weather-app {
     text-align: center;
     max-width: 400px;
+    z-index: 1;
 }
 
+/* Animated Background Layers */
+body::before, body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+/* Sunny Animation */
+@keyframes sunny {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+}
+
+.sunny::before {
+    background-image: url('path/to/sunny-background.gif'); /* Replace with a sunny animated GIF */
+    animation: sunny 20s linear infinite;
+}
+
+/* Rainy Animation */
+@keyframes rainy {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+.rainy::before {
+    background-image: url('path/to/rainy-background.gif'); /* Replace with a rainy animated GIF */
+    animation: rainy 10s linear infinite;
+}
+
+/* Cloudy Animation */
+@keyframes cloudy {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 0; }
+}
+
+.cloudy::before {
+    background-image: url('path/to/cloudy-background.gif'); /* Replace with a cloudy animated GIF */
+    animation: cloudy 30s linear infinite;
+}
+
+/* Snowy Animation */
+@keyframes snowy {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+}
+
+.snowy::before {
+    background-image: url('path/to/snowy-background.gif'); /* Replace with a snowy animated GIF */
+    animation: snowy 15s linear infinite;
+}
+
+/* Additional Weather App Styling */
 .search-box, .forecast-options {
     margin: 20px 0;
 }
@@ -21,10 +82,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background: #4fc3f7;
+    background: rgba(79, 195, 247, 0.9); /* Semi-transparent card background */
     padding: 20px;
     border-radius: 8px;
     color: #fff;
+    z-index: 1;
 }
 
 .forecast-cards {
@@ -35,24 +97,7 @@ body {
 
 .forecast-card {
     padding: 10px;
-    background: #29b6f6;
+    background: rgba(41, 182, 246, 0.8); /* Semi-transparent forecast background */
     border-radius: 6px;
     min-width: 100px;
-}
-
-/* Weather-based background colors */
-.sunny {
-    background-color: #ffe082;
-}
-
-.rainy {
-    background-color: #64b5f6;
-}
-
-.cloudy {
-    background-color: #90a4ae;
-}
-
-.snowy {
-    background-color: #cfd8dc;
 }
