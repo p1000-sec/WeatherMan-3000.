@@ -7,11 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="weather-app">
+    <div class="weather-app" id="weatherApp">
         <h1>Weather App</h1>
         <div class="search-box">
             <input type="text" id="city" placeholder="Enter city name">
             <button onclick="fetchWeather()">Get Weather</button>
+            <select id="city-selector" onchange="switchCity()">
+                <option value="">Previous Cities</option>
+            </select>
+        </div>
+        <div class="forecast-options">
+            <button onclick="fetchForecast(7)">7-Day Forecast</button>
+            <button onclick="fetchForecast(14)">14-Day Forecast</button>
+            <button onclick="fetchForecast(30)">30-Day Forecast</button>
         </div>
         <div id="weather-display" class="weather-card"></div>
         <div id="forecast-display" class="forecast-cards"></div>
