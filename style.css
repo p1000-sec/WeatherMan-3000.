@@ -4,8 +4,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: #e0f7fa;
     margin: 0;
+    transition: background 0.5s;
 }
 
 .weather-app {
@@ -13,7 +13,7 @@ body {
     max-width: 400px;
 }
 
-.search-box {
+.search-box, .forecast-options {
     margin: 20px 0;
 }
 
@@ -38,4 +38,21 @@ body {
     background: #29b6f6;
     border-radius: 6px;
     min-width: 100px;
+}
+
+/* Weather-based background colors */
+.sunny {
+    background-color: #ffe082;
+}
+
+.rainy {
+    background-color: #64b5f6;
+}
+
+.cloudy {
+    background-color: #90a4ae;
+}
+
+.snowy {
+    background-color: #cfd8dc;
 }
