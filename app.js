@@ -1,4 +1,5 @@
 const apiKey = '';
+const newsApiKey = '';
 let cities = [];
 
 function fetchWeather() {
@@ -83,4 +84,26 @@ function displayForecast(data, days) {
             <p>${day.weather[0].description}</p>
         </div>
     `).join('');
+}
+
+function fetchNews(city) {
+    // News API Call (replace with your actual endpoint if using a different API)
+    fetch(`https://newsapi.org/v2/everything?q=weather ${city}&apiKey=${newsApiKey}`)
+        .then(response => response.json())
+        .then(data => displayNews(data.articles))
+        .catch(error => console.error('Error fetching news:', error));
+}
+
+function displayNews(articles) {
+    const newsDisplay = document.getElementById('news-articles');
+    newsDisplay.innerHTML = articles
+        .slice(0, 5) // Display top 5 news articles
+        .map(article => `
+            <div class="news-card">
+                <h3>${article.title}</h3>
+                <p>${article.description || 'No description available.'}</p>
+                <a href="${article.url}" target="_blank">Read more</a>
+            </div>
+        `)
+        .join('');
 }
